@@ -19,9 +19,9 @@ function Etap1() {
             <button onClick={drawQuestion} className="bg-gradient-to-br from-[#ebd197] via-[#b48811] to-[#a2790d] text-lg font-bold p-3 border-2 border-black rounded-lg flex items-center justify-center cursor-pointer hover:scale-110 duration-300 hover:rotate-3">Losuj pytanie</button>
             {losowaLiczba !== null ? (
                 <div className="flex flex-col w-[95%] sm:w-auto max-w-4xl justify-center items-center bg-black/80 p-6 sm:p-8 border border-black rounded-lg mt-12 text-center">
-                    <p className="text-xl font-medium mb-6">{etapI[losowaLiczba].kategoria}</p>
+                    <p className="text-xl font-medium mb-6 text-blue-400">{etapI[losowaLiczba].kategoria}</p>
                     <h1 className="text-2xl sm:text-3xl font-bold mb-6">{etapI[losowaLiczba].pytanie}</h1>
-                    <p className="text-lg">Odpowiedź: {etapI[losowaLiczba].odpowiedź}</p>
+                    <p className="text-lg text-yellow-300">Odpowiedź: {etapI[losowaLiczba].odpowiedź}</p>
                 </div>
             ) : (
                 <div className="flex flex-col w-[95%] sm:w-auto max-w-4xl justify-center items-center bg-black/80 p-6 sm:p-8 border border-black rounded-lg mt-12 text-center">
