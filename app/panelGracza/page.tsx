@@ -1,5 +1,5 @@
 "use client"
-import { useState, useEffect } from "react";
+import { useState, useEffect,useRef } from "react";
 import Link from "next/link";
 import {etapI,etapII,final} from "../pytania"
 
@@ -7,7 +7,10 @@ import {etapI,etapII,final} from "../pytania"
 function PanelGracza() {
     const [zycie, setZycie] = useState(3);
     const [stanGry,setStanGry] = useState<{etap:string,index:number} | null>(null);
-    const [koniec,setKoniec] = useState(false);
+    const [zegar,setZegar] = useState(0);
+
+    const audioZgloszenie = useRef<HTMLAudioElement | null>(null);
+
 
     useEffect(() => {
         const pobierzStanGry = async () => {
@@ -22,9 +25,16 @@ function PanelGracza() {
            }
         }
         pobierzStanGry();
+        
 
         const interval = setInterval(pobierzStanGry, 1000);
         return () => clearInterval(interval);
+    }, []);
+
+    useEffect(() => {
+       if(typeof window !== "undefined") {
+        audioZgloszenie.current = new Audio("/zgloszenie.mp3");
+       }
     }, []);
         
         
@@ -49,7 +59,6 @@ function PanelGracza() {
             const noweZycie = zycie - 1;
             setZycie(noweZycie);
             if(noweZycie === 0) {
-                setKoniec(true);
                 setTimeout(() => {
                     alert("Przegrałeś!");
                 }, 180);
@@ -59,6 +68,23 @@ function PanelGracza() {
 
     const resetZycia = () => {
         setZycie(3);
+    }
+
+    const czasStartuRef = useRef<number>(0);
+    useEffect(() => {
+        czasStartuRef.current = performance.now();
+    }, [stanGry]);
+
+    const zglosSie = () => {
+        audioZgloszenie.current?.play().catch((error) => {
+            console.error("Błąd odtwarzania dźwięku:", error);
+        });
+        const czasKlikniecia = performance.now();
+        const czasReakcji = (czasKlikniecia - czasStartuRef.current) / 1000;
+        const sformatowanyCzas = czasReakcji.toFixed(3);
+
+        setZegar(Number(sformatowanyCzas));
+        console.log(zegar);
     }
 
     return (
@@ -73,6 +99,10 @@ function PanelGracza() {
             <button onClick={resetZycia} className="bg-green-600 text-lg font-bold py-2 px-6 rounded-lg flex items-center justify-center cursor-pointer duration-300 hover:bg-green-700 mt-10">
                 Resetuj życie
             </button>
+            <button onClick={zglosSie} className="bg-red-600 text-lg font-bold py-2 px-6 rounded-lg flex items-center justify-center cursor-pointer duration-300 hover:bg-red-700 mt-10">
+                Zgłoś się
+            </button>
+            <p className="text-2xl font-bold mt-10 bg-black/80 ">{zegar > 0 && `Czas reakcji: ${zegar} s`}</p>
         </div>
     );
 }
