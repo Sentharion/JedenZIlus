@@ -1,13 +1,23 @@
 "use client"
 import { etapI } from "../pytania";
-import { useState } from "react";
+import { useState,useRef } from "react";
 import Link from "next/link";
 
 function Etap1() {
+    const audioGood = useRef(new Audio("/dobrze.mp3"));
+    const audioBad = useRef(new Audio("/zle.mp3"));
     const [losowaLiczba, setLosowaLiczba] = useState<number | null>(null);
 
     const drawQuestion = () => {
         setLosowaLiczba(Math.floor(Math.random() * etapI.length));
+    }
+
+    const handleGood = () => {
+        audioGood.current.play();
+    }
+
+    const handleBad = () => {
+        audioBad.current.play();
     }
 
     return (
@@ -18,11 +28,18 @@ function Etap1() {
             </h1>
             <button onClick={drawQuestion} className="bg-gradient-to-br from-[#ebd197] via-[#b48811] to-[#a2790d] text-lg font-bold p-3 border-2 border-black rounded-lg flex items-center justify-center cursor-pointer hover:scale-110 duration-300 hover:rotate-3">Losuj pytanie</button>
             {losowaLiczba !== null ? (
+                <>
                 <div className="flex flex-col w-[95%] sm:w-auto max-w-4xl justify-center items-center bg-black/80 p-6 sm:p-8 border border-black rounded-lg mt-12 text-center">
                     <p className="text-xl font-medium mb-6 text-blue-400">{etapI[losowaLiczba].kategoria}</p>
                     <h1 className="text-2xl sm:text-3xl font-bold mb-6">{etapI[losowaLiczba].pytanie}</h1>
                     <p className="text-lg text-yellow-300">Odpowiedź: {etapI[losowaLiczba].odpowiedź}</p>
                 </div>
+                    <div className="flex justify-center items-center gap-4 mt-6">
+                        <button onClick={handleGood} className="bg-green-600 text-lg font-bold py-2 px-6 rounded-lg flex items-center justify-center cursor-pointer duration-300 hover:bg-green-700">Dobrze</button>
+                        <button onClick={handleBad} className="bg-red-600 text-lg font-bold py-2 px-6 rounded-lg flex items-center justify-center cursor-pointer duration-300 hover:bg-red-700">Źle</button>
+                    </div>
+                </>
+                
             ) : (
                 <div className="flex flex-col w-[95%] sm:w-auto max-w-4xl justify-center items-center bg-black/80 p-6 sm:p-8 border border-black rounded-lg mt-12 text-center">
                     <p className="text-xl font-medium">Kliknij przycisk, aby wylosować pytanie</p>
