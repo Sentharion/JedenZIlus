@@ -9,8 +9,6 @@ function PanelGracza() {
     const [stanGry,setStanGry] = useState<{etap:string,index:number} | null>(null);
     const [zegar,setZegar] = useState(0);
 
-    const audioZgloszenie = useRef<HTMLAudioElement | null>(null);
-
 
     useEffect(() => {
         const pobierzStanGry = async () => {
@@ -31,12 +29,6 @@ function PanelGracza() {
         return () => clearInterval(interval);
     }, []);
 
-    useEffect(() => {
-       if(typeof window !== "undefined") {
-        audioZgloszenie.current = new Audio("/zgloszenie.mp3");
-        audioZgloszenie.current.load();
-       }
-    }, []);
         
         
     const pobierzPytanie = () => {
@@ -77,9 +69,6 @@ function PanelGracza() {
     }, [stanGry]);
 
     const zglosSie = () => {
-        audioZgloszenie.current?.play().catch((error) => {
-            console.error("Błąd odtwarzania dźwięku:", error);
-        });
         const czasKlikniecia = performance.now();
         const czasReakcji = (czasKlikniecia - czasStartuRef.current) / 1000;
         const sformatowanyCzas = czasReakcji.toFixed(3);

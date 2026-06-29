@@ -1,22 +1,10 @@
 "use client"
 import { etapI } from "../pytania";
-import { useState, useRef, useEffect } from "react";
+import { useState} from "react";
 import Link from "next/link";
 
 function Etap1() {
-    const audioGood = useRef<HTMLAudioElement | null>(null);
-    const audioBad = useRef<HTMLAudioElement | null>(null);
     const [losowaLiczba, setLosowaLiczba] = useState<number | null>(null);
-
-    useEffect(()=>{
-        if(typeof window !== "undefined") {
-            audioGood.current = new Audio("/dobrze.mp3");
-            audioBad.current = new Audio("/zle.mp3");
-            audioGood.current.load();
-            audioBad.current.load();
-        }
-    },[])
-
     const drawQuestion = () => {
         setLosowaLiczba(Math.floor(Math.random() * etapI.length));
         fetch("/api/stanGry", {
@@ -26,14 +14,6 @@ function Etap1() {
             },
             body: JSON.stringify({ etap: "Etap I", index: losowaLiczba }),
         });
-    }
-
-    const handleGood = () => {
-        audioGood.current?.play();
-    }
-
-    const handleBad = () => {
-        audioBad.current?.play();
     }
 
     return (
@@ -51,8 +31,8 @@ function Etap1() {
                     <p className="text-lg text-yellow-300">Odpowiedź: {etapI[losowaLiczba].odpowiedź}</p>
                 </div>
                     <div className="flex justify-center items-center gap-4 mt-6">
-                        <button onClick={handleGood} className="bg-green-600 text-lg font-bold py-2 px-6 rounded-lg flex items-center justify-center cursor-pointer duration-300 hover:bg-green-700">Dobrze</button>
-                        <button onClick={handleBad} className="bg-red-600 text-lg font-bold py-2 px-6 rounded-lg flex items-center justify-center cursor-pointer duration-300 hover:bg-red-700">Źle</button>
+                        <button className="bg-green-600 text-lg font-bold py-2 px-6 rounded-lg flex items-center justify-center cursor-pointer duration-300 hover:bg-green-700">Dobrze</button>
+                        <button className="bg-red-600 text-lg font-bold py-2 px-6 rounded-lg flex items-center justify-center cursor-pointer duration-300 hover:bg-red-700">Źle</button>
                     </div>
                 </>
                 

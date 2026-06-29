@@ -5,21 +5,9 @@ import Link from "next/link";
 
 
 function Etap2() {
-    const audioGood = useRef<HTMLAudioElement | null>(null);
-    const audioBad = useRef<HTMLAudioElement | null>(null);
-
     const [losowaLiczba, setLosowaLiczba] = useState<number | null>(null);
     const [iloscPytan, setIloscPytan] = useState(40);
     const [koniec, setKoniec] = useState(false);
-
-    useEffect(()=>{
-        if(typeof window !== "undefined") {
-            audioGood.current = new Audio("/dobrze.mp3");
-            audioBad.current = new Audio("/zle.mp3");
-            audioGood.current.load();
-            audioBad.current.load();
-        }
-    },[])
 
     const drawQuestion = () => {
         if (koniec) return;
@@ -31,14 +19,6 @@ function Etap2() {
         setLosowaLiczba(Math.floor(Math.random() * final.length));
         setIloscPytan(iloscPytan - 1);
     }
-    const handleGood = () => {
-        audioGood.current?.play();
-    }
-
-    const handleBad = () => {
-        audioBad.current?.play();
-    }
-
     return (
         <div className="w-full min-h-screen flex flex-col justify-center items-center py-20 px-4">
             <Link href="\"> <span className="absolute top-4 left-4 sm:top-10 sm:left-10 text-xl font-bold p-3 rounded-lg flex items-center justify-center gap-2 cursor-pointer hover:scale-110 duration-300"> <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="lucide lucide-arrow-left-icon lucide-arrow-left"><path d="m12 19-7-7 7-7" /><path d="M19 12H5" /></svg>Powrót</span></Link>
@@ -59,8 +39,8 @@ function Etap2() {
                         <p className="text-lg text-yellow-300">Odpowiedź: {final[losowaLiczba].odpowiedź}</p>
                     </div>
                     <div className="flex justify-center items-center gap-4 mt-6">
-                        <button onClick={handleGood} className="bg-green-600 text-lg font-bold py-2 px-6 rounded-lg flex items-center justify-center cursor-pointer duration-300 hover:bg-green-700">Dobrze</button>
-                        <button onClick={handleBad} className="bg-red-600 text-lg font-bold py-2 px-6 rounded-lg flex items-center justify-center cursor-pointer duration-300 hover:bg-red-700">Źle</button>
+                        <button className="bg-green-600 text-lg font-bold py-2 px-6 rounded-lg flex items-center justify-center cursor-pointer duration-300 hover:bg-green-700">Dobrze</button>
+                        <button className="bg-red-600 text-lg font-bold py-2 px-6 rounded-lg flex items-center justify-center cursor-pointer duration-300 hover:bg-red-700">Źle</button>
                     </div>
                 </>
             ) : (
